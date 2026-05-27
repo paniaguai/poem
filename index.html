@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PawVibesZ — Cats on Zoom 🐾</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --hot-pink:   #FF3CA0;
+      --lime:       #A8FF3E;
+      --cyan:       #00F5FF;
+      --violet:     #BF00FF;
+      --orange:     #FF7A00;
+      --yellow:     #FFE600;
+      --mint:       #00FFB3;
+      --coral:      #FF5252;
+      --deep:       #0D0020;
+      --card-bg:    rgba(255,255,255,0.06);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--deep);
+      font-family: 'Nunito', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='28'%3E🐾%3C/text%3E%3C/svg%3E") 16 16, auto;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.35;
+    }
+
+    /* ── BLOBS ── */
+    .blob {
+      position: fixed; border-radius: 50%; filter: blur(90px);
+      pointer-events: none; z-index: 0; animation: drift 12s ease-in-out infinite alternate;
+    }
+    .blob1 { width:500px; height:500px; background:var(--hot-pink); opacity:.18; top:-100px; left:-150px; animation-delay:0s; }
+    .blob2 { width:400px; height:400px; background:var(--violet); opacity:.2; bottom:-80px; right:-120px; animation-delay:-4s; }
+    .blob3 { width:300px; height:300px; background:var(--cyan); opacity:.15; top:40%; left:50%; animation-delay:-8s; }
+    @keyframes drift { from{transform:translate(0,0) scale(1);} to{transform:translate(40px,30px) scale(1.08);} }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 40px 20px 80px;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(191,0,255,.25) 0%, transparent 70%);
+    }
+
+    .hero-badge {
+      display: inline-block; margin-bottom: 24px;
+      padding: 8px 22px; border-radius: 999px;
+      background: linear-gradient(135deg, var(--hot-pink), var(--orange));
+      font-size: .85rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+      animation: pop .6s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes pop { from{transform:scale(.5);opacity:0;} to{transform:scale(1);opacity:1;} }
+
+    .hero h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(3rem, 10vw, 7.5rem);
+      line-height: 1;
+      background: linear-gradient(135deg, var(--yellow) 0%, var(--hot-pink) 40%, var(--cyan) 80%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(255,60,160,.5));
+      animation: slideUp .8s .2s cubic-bezier(.16,1,.3,1) both;
+    }
+    @keyframes slideUp { from{transform:translateY(40px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+
+    .hero-sub {
+      margin-top: 18px; font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-weight: 600; color: rgba(255,255,255,.75);
+      animation: slideUp .8s .4s cubic-bezier(.16,1,.3,1) both;
+    }
+
+    .hero-cats {
+      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+      margin: 36px 0;
+      animation: slideUp .8s .5s cubic-bezier(.16,1,.3,1) both;
+    }
+    .cat-emoji {
+      font-size: 3rem;
+      display: inline-block;
+      animation: wiggle 3s ease-in-out infinite;
+    }
+    .cat-emoji:nth-child(2) { animation-delay:.3s; }
+    .cat-emoji:nth-child(3) { animation-delay:.6s; }
+    .cat-emoji:nth-child(4) { animation-delay:.9s; }
+    .cat-emoji:nth-child(5) { animation-delay:1.2s; }
+    @keyframes wiggle {
+      0%,100% { transform: rotate(-8deg) scale(1); }
+      50%      { transform: rotate(8deg) scale(1.15); }
+    }
+
+    .cta-btn {
+      display: inline-block; margin-top: 10px; padding: 18px 46px;
+      border-radius: 999px; text-decoration: none; font-weight: 900; font-size: 1.2rem;
+      background: linear-gradient(135deg, var(--lime), var(--cyan));
+      color: #0D0020; letter-spacing: .02em;
+      box-shadow: 0 0 40px rgba(0,245,255,.4), 0 8px 32px rgba(0,0,0,.4);
+      transition: transform .2s, box-shadow .2s;
+      animation: slideUp .8s .7s cubic-bezier(.16,1,.3,1) both;
+    }
+    .cta-btn:hover { transform: scale(1.06) translateY(-3px); box-shadow: 0 0 60px rgba(0,245,255,.6), 0 16px 40px rgba(0,0,0,.5); }
+
+    /* ── SECTION WRAPPER ── */
+    section { position: relative; z-index: 1; padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
+
+    .section-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      text-align: center; margin-bottom: 48px;
+    }
+
+    /* ── POEMS ── */
+    #poems { max-width: 900px; }
+
+    .poem-carousel { position: relative; min-height: 320px; }
+
+    .poem-card {
+      position: absolute; inset: 0;
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 28px; padding: 40px 44px;
+      backdrop-filter: blur(16px);
+      display: flex; flex-direction: column; gap: 20px;
+      opacity: 0; transform: translateY(30px);
+      transition: opacity .5s, transform .5s;
+      pointer-events: none;
+    }
+    .poem-card.active { opacity: 1; transform: none; pointer-events: auto; position: relative; }
+
+    .poem-tag {
+      display: inline-block; padding: 4px 14px; border-radius: 999px;
+      font-size: .72rem; font-weight: 900; text-transform: uppercase; letter-spacing: .1em;
+      width: fit-content;
+    }
+
+    .poem-card h3 {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+    }
+
+    .poem-lines { font-size: 1.05rem; line-height: 1.85; color: rgba(255,255,255,.88); font-weight: 600; font-style: italic; }
+
+    .poem-nav { display: flex; justify-content: center; gap: 14px; margin-top: 32px; flex-wrap: wrap; }
+    .poem-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: rgba(255,255,255,.25); cursor: pointer; border: none;
+      transition: background .2s, transform .2s;
+    }
+    .poem-dot.on { background: var(--hot-pink); transform: scale(1.4); }
+
+    .poem-arrows { display: flex; justify-content: center; gap: 16px; margin-top: 18px; }
+    .arrow-btn {
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+      color: #fff; font-size: 1.3rem; width: 48px; height: 48px;
+      border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .2s, transform .2s;
+    }
+    .arrow-btn:hover { background: var(--hot-pink); transform: scale(1.1); }
+
+    /* ── TICKER ── */
+    .ticker-wrap {
+      width: 100%; overflow: hidden; padding: 16px 0;
+      background: linear-gradient(135deg, var(--violet), var(--hot-pink));
+      position: relative; z-index: 1;
+    }
+    .ticker {
+      display: flex; gap: 0; white-space: nowrap;
+      animation: ticker 28s linear infinite;
+    }
+    .ticker span { padding: 0 32px; font-weight: 800; font-size: 1rem; letter-spacing: .05em; }
+    @keyframes ticker { from{transform:translateX(0);} to{transform:translateX(-50%);} }
+
+    /* ── RAINBOW DIVIDER ── */
+    .rainbow-line {
+      height: 6px; width: 100%; position: relative; z-index: 1;
+      background: linear-gradient(90deg, var(--hot-pink), var(--orange), var(--yellow), var(--lime), var(--cyan), var(--violet), var(--hot-pink));
+      background-size: 300% 100%; animation: rainbowShift 4s linear infinite;
+    }
+    @keyframes rainbowShift { to{background-position:300% 0;} }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      text-align: center; padding: 60px 20px 40px;
+      background: linear-gradient(to top, rgba(191,0,255,.15), transparent);
+    }
+    footer .logo {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, var(--yellow), var(--hot-pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    footer p { margin-top: 12px; color: rgba(255,255,255,.5); font-size: .9rem; }
+    footer a.footer-link {
+      color: var(--cyan); font-weight: 800; text-decoration: none;
+      border-bottom: 2px solid var(--cyan);
+      transition: color .2s;
+    }
+    footer a.footer-link:hover { color: var(--lime); border-color: var(--lime); }
+    .paw-row { font-size: 1.8rem; letter-spacing: 4px; margin-top: 20px; opacity: .5; }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--deep); }
+    ::-webkit-scrollbar-thumb { background: var(--hot-pink); border-radius: 4px; }
+
+    @media(max-width:600px) {
+      .poem-card { padding: 28px 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- background blobs -->
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
+<!-- ══════════════ HERO ══════════════ -->
+<div class="hero">
+  <div class="hero-badge">🐾 Live &amp; Purring</div>
+  <h1>PawVibesZ</h1>
+  <p class="hero-sub">Where Cats Take Over Zoom Calls &amp; Steal Every Heart 😻</p>
+
+  <div class="hero-cats">
+    <span class="cat-emoji">😸</span>
+    <span class="cat-emoji">🐱</span>
+    <span class="cat-emoji">😻</span>
+    <span class="cat-emoji">🐾</span>
+    <span class="cat-emoji">😽</span>
+  </div>
+
+  <a class="cta-btn" href="https://paniaguai.github.io/pawz/" target="_blank" rel="noopener">
+    🔗 Visit PawVibesZ Now ✨
+  </a>
+</div>
+
+<!-- rainbow line -->
+<div class="rainbow-line"></div>
+
+<!-- ══════════════ TICKER ══════════════ -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span>🐾 PAWVIBESZ CATS</span><span>😸 YOU'RE ON MUTE</span><span>🐱 CAMERA ON!</span>
+    <span>🎙️ CAN YOU HEAR ME?</span><span>🐾 ZOOMING IN</span><span>😻 FLUFFY &amp; FABULOUS</span>
+    <span>🌈 PURR PURR PURR</span><span>📹 MEOW MEETING</span><span>🐾 PAWVIBESZ CATS</span>
+    <span>😸 YOU'RE ON MUTE</span><span>🐱 CAMERA ON!</span><span>🎙️ CAN YOU HEAR ME?</span>
+    <span>🐾 ZOOMING IN</span><span>😻 FLUFFY &amp; FABULOUS</span><span>🌈 PURR PURR PURR</span>
+    <span>📹 MEOW MEETING</span>
+  </div>
+</div>
+
+<!-- ══════════════ ZOOM TILES ══════════════ -->
+<!-- ══════════════ POEMS ══════════════ -->
+<section id="poems" style="margin:0 auto;">
+  <h2 class="section-title" style="background:linear-gradient(135deg,var(--hot-pink),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+    📜 Poems From the Paws
+  </h2>
+
+  <div class="poem-carousel" id="poemCarousel">
+
+    <!-- Poem 1 -->
+    <div class="poem-card active" id="poem0">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--hot-pink),var(--orange));color:#fff">🌸 Romance</span>
+      <h3 style="color:var(--hot-pink)">The Cat Who Crashed the Call</h3>
+      <div class="poem-lines">
+        I hopped upon the laptop keys,<br>
+        mid-presentation, with such ease,<br>
+        my human shrieked, the colleagues laughed,<br>
+        my fluffy rear was autographed.<br><br>
+        The meeting froze, the faces stared,<br>
+        I stretched and yawned, I simply cared<br>
+        for nothing more than that one patch<br>
+        of sunlight only I could catch.
+      </div>
+    </div>
+
+    <!-- Poem 2 -->
+    <div class="poem-card" id="poem1">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--cyan),var(--lime));color:#0D0020">🎙️ Comedy</span>
+      <h3 style="color:var(--cyan)">You're Still on Mute</h3>
+      <div class="poem-lines">
+        Meow meow MEOW MEOW meow,<br>
+        (translation: you are still on mute somehow).<br>
+        I've told you seventeen times today,<br>
+        click the little mic — okay?<br><br>
+        Your coworkers can see me though,<br>
+        I've made their afternoon a show,<br>
+        they screenshot me, they share and swoon —<br>
+        I am the star of your Zoom room.
+      </div>
+    </div>
+
+    <!-- Poem 3 -->
+    <div class="poem-card" id="poem2">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--violet),var(--hot-pink));color:#fff">✨ Mystical</span>
+      <h3 style="color:var(--violet)">Digital Familiar</h3>
+      <div class="poem-lines">
+        I walk through pixels, soft and sleek,<br>
+        a ghost of fur and polished cheek,<br>
+        I haunt the borders of your screen,<br>
+        the softest thing you've ever seen.<br><br>
+        By day I guard your bandwidth wide,<br>
+        by night I sleep curled by your side,<br>
+        no firewall, no antivirus —<br>
+        just me, the cat who won't dismiss us.
+      </div>
+    </div>
+
+    <!-- Poem 4 -->
+    <div class="poem-card" id="poem3">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--lime),var(--cyan));color:#0D0020">🌞 Cheerful</span>
+      <h3 style="color:var(--lime)">Biscuit Time on Zoom</h3>
+      <div class="poem-lines">
+        I knead the keyboard left and right,<br>
+        I make the spreadsheet quite a sight,<br>
+        the figures dance, the columns sprawl —<br>
+        a masterpiece! I typed it all.<br><br>
+        My paws are soft, my heart is bold,<br>
+        my whiskers worth their weight in gold,<br>
+        so boop the screen and say hello —<br>
+        it's biscuit time on Zoom, let's go!
+      </div>
+    </div>
+
+    <!-- Poem 5 -->
+    <div class="poem-card" id="poem4">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--orange),var(--yellow));color:#0D0020">🔥 Dramatic</span>
+      <h3 style="color:var(--orange)">Ode to the Ring Light</h3>
+      <div class="poem-lines">
+        O glorious ring of holy light,<br>
+        you make my pupils dilate bright,<br>
+        I gaze into your glowing halo —<br>
+        my human yells, "That's for my Cameo!"<br><br>
+        But I am art, I am the muse,<br>
+        the internet can only lose<br>
+        its heart to me, each clip and frame —<br>
+        the ring light knew I'd steal the game.
+      </div>
+    </div>
+
+    <!-- Poem 6 -->
+    <div class="poem-card" id="poem5">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--hot-pink),var(--violet));color:#fff">🌙 Dreamy</span>
+      <h3 style="color:var(--hot-pink)">Night Shift Purring</h3>
+      <div class="poem-lines">
+        While your eyes grew tired and dim,<br>
+        I watched the notification swim,<br>
+        I batted gently at the light<br>
+        of every ping that crossed the night.<br><br>
+        And when the meeting finally ends,<br>
+        when silence through the darkness bends,<br>
+        I'll curl upon your tired chest<br>
+        and purr you gently into rest.
+      </div>
+    </div>
+
+    <!-- Poem 7 -->
+    <div class="poem-card" id="poem6">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--yellow),var(--lime));color:#0D0020">🍩 Snack Break</span>
+      <h3 style="color:var(--yellow)">The Tuna Agenda</h3>
+      <div class="poem-lines">
+        Item one: the tuna bowl.<br>
+        Item two: reclaim my soul.<br>
+        Item three: the sunny chair.<br>
+        Item four: ignore all stares.<br><br>
+        This meeting's running long, I say,<br>
+        my kibble isn't getting any warmer.<br>
+        I move to adjourn — all in favour? Meow.<br>
+        Motion carried. See you tomorrow.
+      </div>
+    </div>
+
+    <!-- Poem 8 -->
+    <div class="poem-card" id="poem7">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--coral),var(--hot-pink));color:#fff">😤 Petty</span>
+      <h3 style="color:var(--coral)">You Looked Away</h3>
+      <div class="poem-lines">
+        You looked away for half a breath,<br>
+        I pushed your coffee to its death.<br>
+        It tumbled slowly, gloriously down —<br>
+        you gasped, I watched, I did not drown<br><br>
+        in guilt. I never do. I stare<br>
+        at consequence with zero care.<br>
+        The mug is gone, the deed is done.<br>
+        Refill it. I'm not even one<br>
+        percent sorry. Look at me.<br>
+        This was inevitable. ☕
+      </div>
+    </div>
+
+    <!-- Poem 9 -->
+    <div class="poem-card" id="poem8">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--mint),var(--cyan));color:#0D0020">🌿 Zen</span>
+      <h3 style="color:var(--mint)">The Nap Philosopher</h3>
+      <div class="poem-lines">
+        To sleep is not to waste the day —<br>
+        it is to let the day wash away,<br>
+        to press reset on every thought,<br>
+        to live the quiet life I sought.<br><br>
+        The humans rush with things to do,<br>
+        I press my nose into my shoe<br>
+        and breathe, and stretch, and close my eyes.<br>
+        This is the only exercise<br>
+        a creature of pure wisdom needs:<br>
+        a warm soft spot. The universe agrees.
+      </div>
+    </div>
+
+    <!-- Poem 10 -->
+    <div class="poem-card" id="poem9">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--violet),var(--cyan));color:#fff">🔮 Cosmic</span>
+      <h3 style="color:var(--cyan)">Staring at the Wall</h3>
+      <div class="poem-lines">
+        There is a thing behind the wall.<br>
+        You cannot see it. I see all.<br>
+        It hums at frequencies so low<br>
+        your limited ears can't even know.<br><br>
+        I track it with my ancient eyes,<br>
+        I guard you from its slow disguise.<br>
+        You call it "nothing." You call me "strange."<br>
+        I call it Tuesday in my range.
+      </div>
+    </div>
+
+    <!-- Poem 11 -->
+    <div class="poem-card" id="poem10">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--orange),var(--coral));color:#fff">🎭 Dramatic</span>
+      <h3 style="color:var(--orange)">The Empty Bowl</h3>
+      <div class="poem-lines">
+        The bowl is empty. I am slain.<br>
+        No mortal has known greater pain.<br>
+        I lay beside the vacant dish<br>
+        and mourn the ghost of every fish.<br><br>
+        You filled it — five whole minutes past!<br>
+        But time is short and nothing lasts.<br>
+        A single kibble more, I beg —<br>
+        I press my face against your leg.<br><br>
+        You check: the bowl is full. I know.<br>
+        The performance was the point. Let's go.
+      </div>
+    </div>
+
+    <!-- Poem 12 -->
+    <div class="poem-card" id="poem11">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--lime),var(--yellow));color:#0D0020">🌱 Wholesome</span>
+      <h3 style="color:var(--lime)">The Slow Blink</h3>
+      <div class="poem-lines">
+        I look at you across the room,<br>
+        the afternoon a golden bloom,<br>
+        and slowly, softly close my eyes —<br>
+        the truest love that never lies.<br><br>
+        No words, no grand romantic fuss,<br>
+        just this small blink that says: it's us.<br>
+        You blink back slowly. Now we're bound<br>
+        by something softer than a sound.
+      </div>
+    </div>
+
+    <!-- Poem 13 -->
+    <div class="poem-card" id="poem12">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--hot-pink),var(--lime));color:#fff">🎪 Chaotic</span>
+      <h3 style="color:var(--hot-pink)">3 AM Zoomies</h3>
+      <div class="poem-lines">
+        Three o'clock: the signal fires.<br>
+        Something in my brain rewires.<br>
+        I launch myself off every wall,<br>
+        I thunder down the darkened hall.<br><br>
+        I knock the lamp, I flip the rug,<br>
+        I body-slam the sleeping pug.<br>
+        And then — as fast as it began —<br>
+        I sit and lick my paw. Deadpan.<br><br>
+        You watched, confused, from your bed frame.<br>
+        I have no explanation. Same.
+      </div>
+    </div>
+
+    <!-- Poem 14 -->
+    <div class="poem-card" id="poem13">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--cyan),var(--violet));color:#fff">💻 Tech</span>
+      <h3 style="color:var(--cyan)">Ctrl + Cat</h3>
+      <div class="poem-lines">
+        I closed the tab you needed most,<br>
+        I sent the email — I'm the host.<br>
+        I scheduled seven meetings (none<br>
+        of which make sense) and then I'm done.<br><br>
+        Your password's now a string of paws,<br>
+        your desktop wallpaper: my claws.<br>
+        The IT team cannot explain<br>
+        why all your fonts are Comic Sans again.<br><br>
+        I did it. I regret nothing.<br>
+        Your laptop is my everything.
+      </div>
+    </div>
+
+    <!-- Poem 15 -->
+    <div class="poem-card" id="poem14">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--yellow),var(--orange));color:#0D0020">☀️ Morning</span>
+      <h3 style="color:var(--yellow)">Rise and Feed Me</h3>
+      <div class="poem-lines">
+        It's 5 AM, the sun's not up,<br>
+        but I have needs. I sit. Erupt<br>
+        into a purr beside your ear —<br>
+        a sound designed for you to hear<br><br>
+        even through sleep. I tap your nose.<br>
+        I sit upon your sleeping toes.<br>
+        I lick your forehead. You groan "no."<br>
+        I knock your phone onto the floor.<br><br>
+        You rise. You feed me. Golden hour.<br>
+        You are my favourite superpower.
+      </div>
+    </div>
+
+    <!-- Poem 16 -->
+    <div class="poem-card" id="poem15">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--violet),var(--mint));color:#fff">🌌 Existential</span>
+      <h3 style="color:var(--violet)">Window Theory</h3>
+      <div class="poem-lines">
+        The bird beyond the glass is mocking me.<br>
+        It exists in a dimension I can't see<br>
+        through paw-prints on the pane — I've tried,<br>
+        I've chirped at it, I've pressed and sighed.<br><br>
+        The glass is cold but I persist,<br>
+        a philosopher who can't resist<br>
+        the question that the bird won't answer:<br>
+        what if I too were a dancer<br>
+        in that wide impossible sky?<br>
+        (I'd probably just nap. But still. Why.)
+      </div>
+    </div>
+
+    <!-- Poem 17 -->
+    <div class="poem-card" id="poem16">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--coral),var(--yellow));color:#0D0020">🎁 Gifted</span>
+      <h3 style="color:var(--coral)">The Gift I Brought You</h3>
+      <div class="poem-lines">
+        I brought you something from outside.<br>
+        A present wrapped in hunter's pride.<br>
+        You screamed. I dropped it at your feet<br>
+        and waited for the thanks to meet<br><br>
+        my patient, glowing amber eyes.<br>
+        You wept. You said you'd said goodbyes<br>
+        to catching things. I do not care.<br>
+        My love language: I was there.<br><br>
+        The gift was fine. Your reaction: less.<br>
+        Tomorrow I'll try harder. Bless.
+      </div>
+    </div>
+
+    <!-- Poem 18 -->
+    <div class="poem-card" id="poem17">
+      <span class="poem-tag" style="background:linear-gradient(135deg,var(--hot-pink),var(--cyan));color:#fff">🐾 PawVibesZ</span>
+      <h3 style="color:var(--hot-pink)">The PawVibesZ Anthem</h3>
+      <div class="poem-lines">
+        We are the cats of every screen,<br>
+        the softest things you've ever seen,<br>
+        we crash your calls, we steal your chair,<br>
+        we leave our fur on everywhere.<br><br>
+        But when the world is loud and bright<br>
+        and nothing's feeling quite all right,<br>
+        just find a cat and press your face<br>
+        into that warm and purring space.<br><br>
+        This is PawVibesZ — come on in.<br>
+        The cats are live. Let's begin. 🐾
+      </div>
+    </div>
+
+  </div><!-- end carousel -->
+
+  <div class="poem-arrows">
+    <button class="arrow-btn" id="prevPoem">&#8592;</button>
+    <button class="arrow-btn" id="nextPoem">&#8594;</button>
+  </div>
+
+  <div class="poem-nav" id="poemDots"></div>
+
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<div class="rainbow-line"></div>
+<footer>
+  <div class="logo">🐾 PawVibesZ</div>
+  <p style="margin-top:16px;font-size:1rem;font-weight:600;color:rgba(255,255,255,.8)">
+    The purrfect corner of the internet. Come say hello! 😻
+  </p>
+  <p style="margin-top:12px;font-size:1.05rem;">
+    <a class="footer-link" href="https://paniaguai.github.io/pawz/" target="_blank" rel="noopener">
+      🔗 paniaguai.github.io/pawz/
+    </a>
+  </p>
+  <div class="paw-row">🐾🐾🐾🐾🐾🐾🐾</div>
+  <p style="margin-top:20px;font-size:.8rem;opacity:.4;">Made with ♥ and infinite purrs &nbsp;·&nbsp; PawVibesZ © 2026</p>
+</footer>
+
+<script>
+  // ── POEM CAROUSEL ──
+  const poems   = document.querySelectorAll('.poem-card');
+  const dotWrap = document.getElementById('poemDots');
+  let current   = 0;
+
+  poems.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.className = 'poem-dot' + (i === 0 ? ' on' : '');
+    b.onclick = () => goTo(i);
+    dotWrap.appendChild(b);
+  });
+
+  function goTo(n) {
+    poems[current].classList.remove('active');
+    dotWrap.children[current].classList.remove('on');
+    current = (n + poems.length) % poems.length;
+    poems[current].classList.add('active');
+    dotWrap.children[current].classList.add('on');
+  }
+
+  document.getElementById('nextPoem').onclick = () => goTo(current + 1);
+  document.getElementById('prevPoem').onclick = () => goTo(current - 1);
+
+  // auto-advance every 7s
+  setInterval(() => goTo(current + 1), 7000);
+</script>
+</body>
+</html>
